@@ -1,0 +1,8 @@
+<resources>
+    <string name="title_activity_maps">Map</string>
+    <string name="app_name">LocationApp</string>
+    <string name="go">Go</string>
+    <string name="set_photo">Set Photo</string>
+    <string name="lat">lat</string>
+    <string name="lng">lng</string>
+</resources>
