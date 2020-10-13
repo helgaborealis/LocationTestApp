@@ -1,7 +1,6 @@
 package net.borlis.myapplication.vm
 
 import android.graphics.Bitmap
-import android.net.Uri
 import android.text.Editable
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +11,7 @@ import net.borlis.myapplication.domain.CoordinatesUiModel
 class MainViewModel @ViewModelInject constructor() : BaseViewModel<CoordinatesUiModel>() {
 
     var latlngLiveData: MutableLiveData<LatLng> = MutableLiveData()
-    var avatar:MutableLiveData<Bitmap> = MutableLiveData()
+    var avatar: MutableLiveData<Bitmap> = MutableLiveData()
 
     fun onGoClick(lat: Editable, lng: Editable) {
 
@@ -26,9 +25,10 @@ class MainViewModel @ViewModelInject constructor() : BaseViewModel<CoordinatesUi
         } else {
             WrongInputSideEffect.post()
         }
-        {
+    }
 
-        }
+    fun photoPicked(bitmap: Bitmap?) {
+        avatar.value = bitmap
     }
 
     private fun correctCoordinates(lat: Double, lng: Double) =

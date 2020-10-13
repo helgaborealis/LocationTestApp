@@ -1,16 +1,14 @@
 package net.borlis.myapplication.ui
 
 import android.app.Activity
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -18,11 +16,15 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import net.borlis.myapplication.R
 import net.borlis.myapplication.listeners.GoToLocationListener
 import net.borlis.myapplication.listeners.PickPhotoListener
 import net.borlis.myapplication.sideeffects.SideEffect
 import net.borlis.myapplication.sideeffects.SideEffectConsumer
+import net.borlis.myapplication.utils.getBitmapAsync
 import net.borlis.myapplication.vm.HideKeyBoardSideEffect
 import net.borlis.myapplication.vm.MainViewModel
 import net.borlis.myapplication.vm.WrongInputSideEffect
@@ -42,9 +44,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoToLocationListen
     }
 
     override fun photoPicked(uri: Uri) {
-        val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
-        val scaledBitmap = Bitmap.createScaledBitmap(bitmap, 42, 42, true)
-        viewModel.avatar.value = scaledBitmap
+        lifecycleScope.launch {
+            val avatarBitmap = getBitmapAsync(applicationContext, uri)
+            viewModel.photoPicked(avatarBitmap)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
